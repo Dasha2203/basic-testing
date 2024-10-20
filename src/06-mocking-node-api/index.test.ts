@@ -44,12 +44,12 @@ describe('doStuffByInterval', () => {
   });
 
   test('should set interval with provided callback and timeout', () => {
-    jest.spyOn(global, 'setInterval');
+    const mock = jest.spyOn(global, 'setInterval');
     const mls = 10000;
     doStuffByInterval(clb, mls);
 
-    expect(setInterval).toHaveBeenCalledTimes(1);
-    expect(setImmediate).toHaveBeenCalledWith(clb, mls);
+    expect(mock).toHaveBeenCalledTimes(1);
+    expect(mock).toHaveBeenCalledWith(clb, mls);
   });
 
   test('should call callback multiple times after multiple intervals', () => {
