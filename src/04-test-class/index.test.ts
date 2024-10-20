@@ -16,6 +16,7 @@ describe('BankAccount', () => {
   beforeEach(() => {
     account = getBankAccount(INITIAL_BALANCE);
     otherAccount = getBankAccount(ANOTHER_INITIAL_BALANCE);
+    jest.clearAllMocks();
   });
   test('should create account with initial balance', () => {
     expect(account.getBalance()).toBe(INITIAL_BALANCE);
@@ -73,25 +74,22 @@ describe('BankAccount', () => {
 
   test('fetchBalance should return number in case if request did not failed', async () => {
     const amount = 80;
-    const mock = jest.spyOn(account, 'fetchBalance').mockResolvedValue(amount);
+    jest.spyOn(account, 'fetchBalance').mockResolvedValue(amount);
     const balance = await account.fetchBalance();
     expect(balance).toBe(amount);
-    mock.mockRestore();
   });
 
   test('should set new balance if fetchBalance returned number', async () => {
     const amount = 80;
-    const mock = jest.spyOn(account, 'fetchBalance').mockResolvedValue(amount);
+    jest.spyOn(account, 'fetchBalance').mockResolvedValue(amount);
     await account.synchronizeBalance();
     expect(account.getBalance()).toBe(amount);
-    mock.mockRestore();
   });
 
   test('should throw SynchronizationFailedError if fetchBalance returned null', async () => {
-    const mock = jest.spyOn(account, 'fetchBalance').mockResolvedValue(null);
+    jest.spyOn(account, 'fetchBalance').mockResolvedValue(null);
     await expect(account.synchronizeBalance()).rejects.toThrow(
       SynchronizationFailedError,
     );
-    mock.mockRestore();
   });
 });
